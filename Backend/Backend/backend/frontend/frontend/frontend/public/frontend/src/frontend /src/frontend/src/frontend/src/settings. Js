@@ -1,0 +1,17 @@
+import React from "react";
+
+function Settings({ settings, setSettings }) {
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <label>
+        Companion’s Name:{" "}
+        <input
+          value={settings.name}
+          onChange={(e) => setSettings({ ...settings, name: e.target.value })}
+        />
+      </label>
+    </div>
+  );
+}
+
+export default Settings;
