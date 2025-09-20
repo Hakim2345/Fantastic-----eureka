@@ -1,0 +1,48 @@
+import React, { useState } from "react";
+
+function Chat({ memory, setMemory, settings }) {
+  const [input, setInput] = useState("");
+  const [messages, setMessages] = useState([]);
+
+  async function sendMessage() {
+    if (!input.trim()) return;
+
+    const userMsg = { role: "user", content: input };
+    setMessages([...messages, userMsg]);
+
+    const res = await fetch(
+      process.env.REACT_APP_API_URL + "/chat",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: input, memory }),
+      }
+    );
+
+    const data = await res.json();
+    const botMsg = { role: "assistant", content: data.reply };
+
+    setMessages([...messages, userMsg, botMsg]);
+    setMemory(memory + "\nUser: " + input + "\nAI: " + data.reply);
+    setInput("");
+  }
+
+  return (
+    <div>
+      <div style={{ border: "1px solid #ccc", padding: 10, height: 300, overflowY: "scroll" }}>
+        {messages.map((m, i) => (
+          <p key={i}><b>{m.role === "user" ? "You" : settings.name}:</b> {m.content}</p>
+        ))}
+      </div>
+      <input
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        style={{ width: "80%" }}
+        placeholder="Say something..."
+      />
+      <button onClick={sendMessage}>Send</button>
+    </div>
+  );
+}
+
+export default Chat;
