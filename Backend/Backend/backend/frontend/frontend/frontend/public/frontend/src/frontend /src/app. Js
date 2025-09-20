@@ -1,0 +1,18 @@
+import React, { useState } from "react";
+import Chat from "./Chat";
+import Settings from "./Settings";
+
+function App() {
+  const [memory, setMemory] = useState("");
+  const [settings, setSettings] = useState({ name: "Luna" });
+
+  return (
+    <div style={{ fontFamily: "Arial, sans-serif", padding: 20 }}>
+      <h1>💖 {settings.name} – Your AI Companion</h1>
+      <Settings settings={settings} setSettings={setSettings} />
+      <Chat memory={memory} setMemory={setMemory} settings={settings} />
+    </div>
+  );
+}
+
+export default App;
